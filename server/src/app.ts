@@ -1,11 +1,10 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import { prisma } from './util/db.js';
+import { typeDefs, resolvers } from './modules';
 
-const typeDefs = `#graphql
-  type Query {
-    hello: String!
-  }
-`;
+const server = new ApolloServer({ typeDefs, resolvers });
+startStandaloneServer(server, {
+  listen: { port: 4000 },
+});
 
-console.log(typeDefs);
+console.log(`Server ready at 4000`);
