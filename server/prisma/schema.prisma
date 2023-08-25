@@ -12,15 +12,15 @@ model User {
   email String @unique
   name String
   password String
-  files UserFile[]
+  projects UserProject[]
   permissions UserPermission[]
 }
 
-model File {
+model Project {
   id Int @id @default(autoincrement()) 
   name String
   content String
-  users UserFile[]
+  users UserProject[]
 }
 
 model Permission {
@@ -30,20 +30,20 @@ model Permission {
 }
 
 model UserPermission {
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
-  permission Permission @relation(fields: [permissionId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
   permissionId Int
   @@id([userId, permissionId])
 }
 
-model UserFile {
-  user User @relation(fields: [userId], references: [id])
+model UserProject {
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int 
-  file File @relation(fields: [fileId], references: [id])
-  fileId Int 
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId Int 
   accessType AccessType
-  @@id([userId, fileId])
+  @@id([userId, projectId])
 }
 
 enum AccessType {
