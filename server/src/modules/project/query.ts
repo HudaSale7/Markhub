@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
-import { prisma } from '../../util/db.js';
 import { GraphQLError } from 'graphql';
+import service from './service.js';
 
 export const projectQuery = {
   getProject: async (_: any, args: { id: any }, contextValue: any) => {
@@ -12,15 +12,7 @@ export const projectQuery = {
         },
       });
     }
-    const userProject = await prisma.userProject.findUnique({
-      where: {
-        userId_projectId: { userId: user.id, projectId: +args.id },
-      },
-      select: {
-        project: true,
-        accessType: true,
-      },
-    });
+    const userProject = await service.findUserProject(user.id, +args.id);
 
     if (!userProject) {
       throw new GraphQLError('Server Error.', {
@@ -40,15 +32,7 @@ export const projectQuery = {
         },
       });
     }
-    const userProjects = await prisma.userProject.findMany({
-      select: {
-        project: true,
-        accessType: true,
-      },
-      where: {
-        userId: user.id,
-      },
-    });
+    const userProjects = await service.findAllUserProject(user.id);
     if (!userProjects) {
       throw new GraphQLError('Server Error.', {
         extensions: {

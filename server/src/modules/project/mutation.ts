@@ -1,9 +1,13 @@
 import { Project, User } from '@prisma/client';
-import { prisma } from '../../util/db.js';
 import { GraphQLError } from 'graphql';
+import service from './service.js';
 
 export const projectMutation = {
-  createProject: async (_: any, args: { project: any }, contextValue: any) => {
+  createProject: async (
+    _: any,
+    args: { project: Project },
+    contextValue: any
+  ) => {
     const user: User = contextValue.user;
     if (!user) {
       throw new GraphQLError('Not Authenticated.', {
@@ -13,22 +17,7 @@ export const projectMutation = {
       });
     }
     const project: Project = args.project;
-    const userProject = await prisma.userProject.create({
-      data: {
-        accessType: 'EDIT',
-        user: {
-          connect: {
-            id: user.id,
-          },
-        },
-        project: {
-          create: project,
-        },
-      },
-      select: {
-        project: true,
-      },
-    });
+    const userProject = await service.createProject(project, user.id);
     if (!userProject) {
       throw new GraphQLError('Server Error.', {
         extensions: {
@@ -39,7 +28,11 @@ export const projectMutation = {
     return userProject.project;
   },
 
-  updateProject: async (_: any, args: { updatedProject: any }, contextValue: any) => {
+  updateProject: async (
+    _: any,
+    args: { updatedProject: Project },
+    contextValue: any
+  ) => {
     const user: User = contextValue.user;
     if (!user) {
       throw new GraphQLError('Not Authenticated.', {
@@ -50,14 +43,10 @@ export const projectMutation = {
     }
     const updatedProject = args.updatedProject;
 
-    const checkAccessType = await prisma.userProject.findUnique({
-      where: {
-        userId_projectId: { userId: user.id, projectId: +updatedProject.id },
-      },
-      select: {
-        accessType: true,
-      },
-    });
+    const checkAccessType = await service.findUserProject(
+      user.id,
+      +updatedProject.id
+    );
     if (!checkAccessType || checkAccessType.accessType === `VIEW`) {
       throw new GraphQLError('Not Allowed.', {
         extensions: {
@@ -66,15 +55,7 @@ export const projectMutation = {
       });
     }
 
-    const project = await prisma.project.update({
-      where: {
-        id: +updatedProject.id,
-      },
-      data: {
-        name: updatedProject.name,
-        content: updatedProject.content,
-      },
-    });
+    const project = await service.updateProject(updatedProject);
     if (!project) {
       throw new GraphQLError('Server Error.', {
         extensions: {
@@ -95,14 +76,7 @@ export const projectMutation = {
       });
     }
     const projectId = +args.id;
-    const checkAccessType = await prisma.userProject.findUnique({
-      where: {
-        userId_projectId: { userId: user.id, projectId: projectId },
-      },
-      select: {
-        accessType: true,
-      },
-    });
+    const checkAccessType = await service.findUserProject(user.id, projectId);
     if (!checkAccessType || checkAccessType.accessType === `VIEW`) {
       throw new GraphQLError('Not Allowed.', {
         extensions: {
@@ -110,11 +84,7 @@ export const projectMutation = {
         },
       });
     }
-    const project = await prisma.project.delete({
-      where: {
-        id: projectId,
-      },
-    });
+    const project = await service.deleteProject(projectId);
     if (!project) {
       throw new GraphQLError('Server Error.', {
         extensions: {
