@@ -17,6 +17,15 @@ export const userMutation = {
         },
       });
     }
+    const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
+    const isValidEmail = emailRegex.test(args.user.email);
+    if (!isValidEmail) {
+      throw new GraphQLError('Please enter a valid email .', {
+        extensions: {
+          code: 422,
+        },
+      });
+    }
     const hashedPassword: string = await bcryptjs.hash(args.user.password, 12);
     const user = {
       name: args.user.name,
