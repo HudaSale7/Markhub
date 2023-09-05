@@ -1,7 +1,9 @@
+import './Project.css';
+
 const Project = () => {
   return (
     <>
-      <div>hello from project</div>
+      <div className='project'>hello from project</div>
     </>
   );
 };

@@ -5,7 +5,7 @@ export const projectTypes = /* GraphQL */ `
     content: String!
   }
   type ProjectAccessType {
-    project: Project,
+    project: Project
     accessType: String
   }
   extend type Query {
