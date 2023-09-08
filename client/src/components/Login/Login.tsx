@@ -17,7 +17,7 @@ const Login = () => {
     onSuccess: (data: LoginMutationOutput) => {
       localStorage.setItem('token', data.login.token);
       localStorage.setItem('userId', data.login.id);
-      navigate('/project/1');
+      navigate('/project');
     },
     onError: (error: ErrorMessage) => {
       if (error.response.errors[0].extensions.code === 422) {

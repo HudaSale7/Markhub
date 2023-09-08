@@ -18,7 +18,7 @@ const SignUp = () => {
     onSuccess: (data: SignUpMutationOutput) => {
       localStorage.setItem('token', data.signup.token);
       localStorage.setItem('userId', data.signup.id);
-      navigate('/project/1');
+      navigate('/project');
     },
     onError: (error: ErrorMessage) => {
       if (error.response.errors[0].extensions.code === 422) {

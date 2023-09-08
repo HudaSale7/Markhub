@@ -14,7 +14,7 @@ function App() {
       <Route element={<NavBar />}>
         <Route path='/login' element={<Login />} />
         <Route path='/signUp' element={<SignUp />} />
-        <Route element={<ProjectSideBar />}>
+        <Route element={<ProjectSideBar />} path='/project'>
           <Route path='/project/:id' element={<Project />} />
         </Route>
       </Route>

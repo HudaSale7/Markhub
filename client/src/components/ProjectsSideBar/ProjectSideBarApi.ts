@@ -2,7 +2,7 @@ import { request, gql } from 'graphql-request';
 import { ProjectCreateInput, ProjectCreateOutput, Projects } from './types';
 
 export const createProject = async (project: ProjectCreateInput) => {
-  const query = gql`
+  const mutation = gql`
     mutation createProjectQuery($project: projectCreateInput!) {
       createProject(project: $project) {
         name
@@ -20,7 +20,7 @@ export const createProject = async (project: ProjectCreateInput) => {
 
   const data: ProjectCreateOutput = await request(
     `${import.meta.env.VITE_API}/graphql`,
-    query,
+    mutation,
     variables,
     headers
   );
@@ -32,7 +32,7 @@ export const getProjects = async () => {
     query projectsQuery {
       getProjects {
         project {
-          name,
+          name
           id
         }
         accessType
@@ -47,6 +47,29 @@ export const getProjects = async () => {
     `${import.meta.env.VITE_API}/graphql`,
     query,
     {},
+    headers
+  );
+  return data;
+};
+
+export const deleteProject = async (id: number) => {
+  const mutation = gql`
+    mutation deleteProjectQuery($id: ID!) {
+      deleteProject(id: $id) {
+        name
+      }
+    }
+  `;
+  const headers = {
+    Authorization: localStorage.getItem('token') || '',
+  };
+  const variables = {
+    id: id,
+  };
+  const data: Projects = await request(
+    `${import.meta.env.VITE_API}/graphql`,
+    mutation,
+    variables,
     headers
   );
   return data;
