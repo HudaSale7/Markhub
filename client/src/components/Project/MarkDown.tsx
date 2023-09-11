@@ -4,7 +4,14 @@ import remarkGfm from 'remark-gfm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 
-const MarkDown = (props: { value: string }) => {
+const MarkDown = (props: { value: string, loading: boolean }) => {
+  if (props.loading) {
+    return (
+      <div className='loading'>
+        Loading...
+      </div>
+    );
+  }
   return (
     <ReactMarkdown
       children={props.value}

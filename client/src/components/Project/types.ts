@@ -8,3 +8,9 @@ export interface Project {
     accessType: string;
   };
 }
+
+export interface ProjectUpdate {
+  id: number;
+  name: string;
+  content: string;
+}

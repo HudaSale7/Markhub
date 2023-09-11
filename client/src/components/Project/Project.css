@@ -10,7 +10,6 @@
 .markdown {
   width: 50%;
   overflow-y: auto;
-  scrollbar-color: red orange;
   scrollbar-width: thin;
   overflow-wrap: break-word;
   height: calc(100vh - 50px);

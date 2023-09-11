@@ -23,7 +23,7 @@ export const projectTypes = /* GraphQL */ `
   }
   input projectUpdateInput {
     id: ID!
-    content: String!
-    name: String!
+    content: String
+    name: String
   }
 `;

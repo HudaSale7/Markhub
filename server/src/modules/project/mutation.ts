@@ -43,11 +43,11 @@ export const projectMutation = {
     }
     const updatedProject = args.updatedProject;
 
-    const checkAccessType = await service.findUserProject(
+    const previous = await service.findUserProject(
       user.id,
       +updatedProject.id
     );
-    if (!checkAccessType || checkAccessType.accessType === `VIEW`) {
+    if (!previous || previous.accessType === `VIEW`) {
       throw new GraphQLError('Not Allowed.', {
         extensions: {
           code: 420,
@@ -55,7 +55,14 @@ export const projectMutation = {
       });
     }
 
-    const project = await service.updateProject(updatedProject);
+    if (updatedProject.name) {
+      previous.project.name = updatedProject.name;
+    }
+    else if (updatedProject.content) {
+      previous.project.content = updatedProject.content;
+    }
+
+    const project = await service.updateProject(previous.project);
     if (!project) {
       throw new GraphQLError('Server Error.', {
         extensions: {
