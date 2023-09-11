@@ -49,6 +49,7 @@ export const getProjects = async () => {
     {},
     headers
   );
+
   return data;
 };
 

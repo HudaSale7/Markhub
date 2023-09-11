@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import './ProjectSideBar.css';
@@ -8,8 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 
-const ProjectSideBar = () => {
-  const [active, setActive] = useState(-1);
+const ProjectSideBar = () => { 
+  const { id } = useParams();
+  const [active, setActive] = useState(id ? +id : -1);
   const navigate = useNavigate();
 
   const handleCreateProject = async () => {
@@ -76,7 +77,7 @@ const ProjectSideBar = () => {
                 <li
                   key={e.project.id}
                   onClick={() => setActive(e.project.id)}
-                  className={`${active === e.project.id ? 'active' : ''}`}
+                  className={`${active == e.project.id ? 'active' : ''}`}
                 >
                   <Link to={'/project/' + e.project.id}>{e.project.name}</Link>
                   <div className='icon'>
