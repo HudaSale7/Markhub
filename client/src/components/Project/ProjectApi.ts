@@ -1,5 +1,5 @@
 import { request, gql } from 'graphql-request';
-import { Project, ProjectUpdate } from './types';
+import { Project, ProjectUpdateOutput, ProjectUpdateContent } from './types';
 
 export const getProject = async (id: number) => {
   const query = gql`
@@ -30,10 +30,10 @@ export const getProject = async (id: number) => {
   return data;
 };
 
-export const updateProjectContent = async (project: ProjectUpdate) => {
+export const updateProjectContent = async (project: ProjectUpdateContent) => {
   const mutation = gql`
     mutation updateProjectQuery($project: projectUpdateInput!) {
-      updateProject(project: $project) {
+      updateProject(updatedProject: $project) {
         content
       }
     }
@@ -44,7 +44,7 @@ export const updateProjectContent = async (project: ProjectUpdate) => {
   const variables = {
     project: project
   }
-  const data: Project = await request(
+  const data: ProjectUpdateOutput = await request(
     `${import.meta.env.VITE_API}/graphql`,
     mutation,
     variables,

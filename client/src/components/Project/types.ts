@@ -9,8 +9,13 @@ export interface Project {
   };
 }
 
-export interface ProjectUpdate {
+export interface ProjectUpdateOutput {
   id: number;
   name: string;
   content: string;
+}
+
+export interface ProjectUpdateContent {
+  id: number | undefined;
+  content: string | undefined;
 }

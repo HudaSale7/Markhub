@@ -1,17 +1,24 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useParams } from 'react-router-dom';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getProject } from './ProjectApi';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getProject, updateProjectContent } from './ProjectApi';
 import './Project.css';
 import Editor from '@monaco-editor/react';
 import Markdown from './MarkDown.jsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDebounce } from 'usehooks-ts';
 
 const Project = () => {
   const { id } = useParams();
-  const query = useQuery(['project', id], () => getProject(id ? +id : -1));
+  const projectId = id ? +id : -1;
+  const query = useQuery(['project', id], () => getProject(projectId));
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(true);
+  const debouncedValue = useDebounce(
+    query.data?.getProject.project.content,
+    1000
+  );
 
   const handleEditorChange = (value: any) => {
     queryClient.setQueryData(['project', id], {
@@ -22,6 +29,17 @@ const Project = () => {
       },
     });
   };
+
+  const mutation = useMutation({
+    mutationFn: updateProjectContent,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['project', id]);
+    },
+  });
+
+  useEffect(() => {
+    mutation.mutate({ id: projectId, content: debouncedValue });
+  }, [debouncedValue]);
 
   return (
     <>
@@ -51,8 +69,12 @@ const Project = () => {
               },
             }}
           />
+
           <div className='markdown'>
-            <Markdown value={query.data.getProject.project.content} loading={ loading } />
+            <Markdown
+              value={query.data.getProject.project.content}
+              loading={loading}
+            />
           </div>
         </div>
       )}
