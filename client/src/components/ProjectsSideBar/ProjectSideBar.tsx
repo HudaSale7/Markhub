@@ -26,7 +26,7 @@ const ProjectSideBar = () => {
       },
     });
     if (name) {
-      createProjectMutation.mutate({ name: name, content: "" });
+      createProjectMutation.mutate({ name: name, content: `# ${name}` });
     }
   };
 
@@ -39,8 +39,9 @@ const ProjectSideBar = () => {
 
   const createProjectMutation = useMutation({
     mutationFn: createProject,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["projects"]);
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(['projects']);
+      navigate(`/project/${data.createProject.id}`);
     },
   });
 

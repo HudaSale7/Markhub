@@ -4,9 +4,11 @@ export interface ProjectCreateInput {
 }
 
 export interface ProjectCreateOutput {
-  id: number;
-  name: string;
-  content: string;
+  createProject: {
+    id: number;
+    name: string;
+    content: string;
+  }
 }
 
 export interface Projects {

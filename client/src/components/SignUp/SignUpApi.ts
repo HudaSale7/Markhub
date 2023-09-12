@@ -1,4 +1,4 @@
-import { SignUpMutationInput, SignUpMutationOutput } from './types';
+import { GoogleAuthLogin, SignUpMutationInput, SignUpMutationOutput } from './types';
 import { request, gql } from 'graphql-request';
 
 export const userSignUp = async (user: SignUpMutationInput) => {
@@ -14,6 +14,29 @@ export const userSignUp = async (user: SignUpMutationInput) => {
     user: user,
   };
   const data: SignUpMutationOutput = await request(
+    `${import.meta.env.VITE_API}/graphql`,
+    mutation,
+    variables
+  );
+  return data;
+};
+
+export const googleAuth = async (token: string) => {
+  const mutation = gql`
+    mutation loginQuery($token: String!) {
+      loginWithGoogle(token: $token) {
+        id
+        name
+        token
+      }
+    }
+  `;
+
+  const variables = {
+    token: token,
+  };
+
+  const data: GoogleAuthLogin = await request(
     `${import.meta.env.VITE_API}/graphql`,
     mutation,
     variables
