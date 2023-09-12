@@ -1,9 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
-import { userLogin } from './LoginApi.js';
+import { googleAuth, userLogin } from './LoginApi.js';
 import { LoginMutationOutput, ErrorMessage } from './types.js';
 import { Button, Form } from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -17,6 +18,22 @@ const Login = () => {
     onSuccess: (data: LoginMutationOutput) => {
       localStorage.setItem('token', data.login.token);
       localStorage.setItem('userId', data.login.id);
+      navigate('/project');
+    },
+    onError: (error: ErrorMessage) => {
+      if (error.response.errors[0].extensions.code === 422) {
+        setError(error.response.errors[0].message);
+      } else {
+        setError('Network Error');
+      }
+    },
+  });
+
+  const googleLoginMutation = useMutation({
+    mutationFn: googleAuth,
+    onSuccess: (data) => {
+      localStorage.setItem('token', data.loginWithGoogle.token);
+      localStorage.setItem('userId', data.loginWithGoogle.id);
       navigate('/project');
     },
     onError: (error: ErrorMessage) => {
@@ -64,6 +81,12 @@ const Login = () => {
           <Button variant='primary' type='submit' disabled={mutation.isLoading}>
             Submit
           </Button>
+          <GoogleLogin
+            onSuccess={(response) => {
+              const token = response.credential || '';
+              googleLoginMutation.mutate(token);
+            }}
+          ></GoogleLogin>
         </Form>
       </div>
     </>
