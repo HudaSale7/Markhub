@@ -57,10 +57,22 @@ const Project = () => {
     mutation.mutate({ id: projectId, content: debouncedValue });
   }, [debouncedValue]);
 
+  let editorTheme = "";
+
+  if (theme.theme === "dark") {
+    editorTheme = "myTheme";
+  } else if (theme.theme === "light") {
+    editorTheme = "vs-light";
+  } else if (theme.theme === "system") {
+    editorTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "myTheme"
+      : "vs-light";
+  }
+
   return (
     <>
       {query.data && (
-        <div className="project border-t">
+        <div className="project">
           <Editor
             onMount={() => setLoading(false)}
             value={query.data.getProject.project.content}
@@ -69,7 +81,7 @@ const Project = () => {
             width="50%"
             defaultLanguage="markdown"
             options={{
-              theme: theme.theme === "dark" ? "myTheme" : "vs-light",
+              theme: editorTheme,
               wordWrap: "on",
               minimap: { enabled: false },
               showUnused: false,
