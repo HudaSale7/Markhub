@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import bcryptjs from 'bcryptjs';
 import { GraphQLError } from 'graphql';
 import service from './service.js';
+import { OAuth2Client } from 'google-auth-library';
+const client = new OAuth2Client();
 
 export const userMutation = {
   signup: async (
@@ -48,6 +50,7 @@ export const userMutation = {
     return {
       token: token,
       id: createdUser.id,
+      name: user.name,
     };
   },
 
@@ -78,6 +81,43 @@ export const userMutation = {
     return {
       token: token,
       id: user.id,
+      name: user.name,
+    };
+  },
+  loginWithGoogle: async (_: any, args: { token: string }) => {
+    const ticket = await client.verifyIdToken({
+      idToken: args.token,
+      audience:
+        '721393511236-bbgrnnv9otomidedshcgmsn9gkqj0fd1.apps.googleusercontent.com',
+    });
+    const payload = ticket.getPayload();
+    const email = payload?.email;
+    if (!email) {
+      throw new GraphQLError('server error.', {
+        extensions: {
+          code: 422,
+        },
+      });
+    }
+
+    let user = await service.findUser(email);
+    if (!user) {
+      const name = payload?.name ? payload?.name : email;
+      const newUser = {
+        email: email,
+        name: name,
+        password: '',
+      };
+      user = await service.createUser(newUser);
+    }
+    const token: string = jwt.sign(
+      { id: user.id, name: user.name },
+      process.env.SECRET_KEY as string
+    );
+    return {
+      token: token,
+      id: user.id,
+      name: user.name,
     };
   },
 };

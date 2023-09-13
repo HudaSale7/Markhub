@@ -5,6 +5,14 @@ export interface SignUpMutationOutput {
   };
 }
 
+export interface GoogleAuthLogin {
+  loginWithGoogle: {
+    id: string;
+    token: string;
+    name: string;
+  };
+}
+
 export interface SignUpMutationInput {
   name: string;
   email: string;

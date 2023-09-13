@@ -3,7 +3,8 @@ import { SignUpMutationOutput, ErrorMessage } from './types.js';
 import { Button, Form } from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { userSignUp } from './SignUpApi.js';
+import { googleAuth, userSignUp } from './SignUpApi.js';
+import { GoogleLogin } from '@react-oauth/google';
 
 const SignUp = () => {
   const [name, setName] = useState('');
@@ -18,6 +19,22 @@ const SignUp = () => {
     onSuccess: (data: SignUpMutationOutput) => {
       localStorage.setItem('token', data.signup.token);
       localStorage.setItem('userId', data.signup.id);
+      navigate('/project');
+    },
+    onError: (error: ErrorMessage) => {
+      if (error.response.errors[0].extensions.code === 422) {
+        setError(error.response.errors[0].message);
+      } else {
+        setError('Network Error');
+      }
+    },
+  });
+
+  const googleLoginMutation = useMutation({
+    mutationFn: googleAuth,
+    onSuccess: (data) => {
+      localStorage.setItem('token', data.loginWithGoogle.token);
+      localStorage.setItem('userId', data.loginWithGoogle.id);
       navigate('/project');
     },
     onError: (error: ErrorMessage) => {
@@ -75,6 +92,12 @@ const SignUp = () => {
           <Button variant='primary' type='submit' disabled={mutation.isLoading}>
             Submit
           </Button>
+          <GoogleLogin
+            onSuccess={(response) => {
+              const token = response.credential || '';
+              googleLoginMutation.mutate(token);
+            }}
+          ></GoogleLogin>
         </Form>
       </div>
     </>
