@@ -1,5 +1,9 @@
-import { GoogleAuthLogin, SignUpMutationInput, SignUpMutationOutput } from './types';
-import { request, gql } from 'graphql-request';
+import {
+  GoogleAuthLogin,
+  SignUpMutationInput,
+  SignUpMutationOutput,
+} from "./types";
+import { request, gql } from "graphql-request";
 
 export const userSignUp = async (user: SignUpMutationInput) => {
   const mutation = gql`

@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import { MainNav } from "./main-nav";
-
 const NavBar = () => {
   return (
     <>
