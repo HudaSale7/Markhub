@@ -1,14 +1,15 @@
 import { useMutation } from "@tanstack/react-query";
-import { googleAuth, userLogin } from "./LoginApi.js";
-import { LoginMutationOutput, ErrorMessage } from "./types.js";
+import { SignUpMutationOutput, ErrorMessage } from "./types.js";
 import { Button } from "../ui/button.js";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { googleAuth, userSignUp } from "./SignUpApi.js";
 import { GoogleLogin } from "@react-oauth/google";
-import { Label } from "../ui/label.js";
 import { Input } from "../ui/input.js";
+import { Label } from "../ui/label.js";
 
-const Login = () => {
+const SignUp = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   //const [validated, setValidated] = useState(false);
@@ -16,11 +17,11 @@ const Login = () => {
   const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: userLogin,
+    mutationFn: userSignUp,
     networkMode: "always",
-    onSuccess: (data: LoginMutationOutput) => {
-      localStorage.setItem("token", data.login.token);
-      localStorage.setItem("userId", data.login.id);
+    onSuccess: (data: SignUpMutationOutput) => {
+      localStorage.setItem("token", data.signup.token);
+      localStorage.setItem("userId", data.signup.id);
       navigate("/project");
     },
     onError: (error: ErrorMessage) => {
@@ -55,16 +56,25 @@ const Login = () => {
           onSubmit={(e) => {
             //setValidated(true);
             e.preventDefault();
-            mutation.mutate({ email: email, password: password });
+
+            mutation.mutate({ name: name, email: email, password: password });
           }}
-          noValidate
           className="flex flex-col  w-96 border border-gray-200 rounded-md shadow-md p-4"
         >
           <h1 className="  text-5xl text-bold mb-7 flex justify-center">
-            Login
+            Signup
           </h1>
           <p>{mutation.isError ? error : " "}</p>
-
+          <div className=" mb-5">
+            <Label className="  block mb-2 text-lg">Name</Label>
+            <Input
+              required
+              type="text"
+              placeholder="Enter your name"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+            />
+          </div>
           <div className=" mb-5">
             <Label className="  block mb-2 text-lg">Email address</Label>
             <Input
@@ -93,6 +103,7 @@ const Login = () => {
           >
             Submit
           </Button>
+
           <div className="relative mb-5">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
@@ -118,4 +129,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

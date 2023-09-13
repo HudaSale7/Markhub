@@ -1,29 +1,27 @@
-import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import './ProjectSideBar.css';
-import { createProject, deleteProject, getProjects } from './ProjectSideBarApi';
-import Swal from 'sweetalert2';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 
-const ProjectSideBar = () => { 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { createProject, deleteProject, getProjects } from "./ProjectSideBarApi";
+import Swal from "sweetalert2";
+
+import { Sidebar } from "../sidebar/sidebar";
+const ProjectSideBar = () => {
   const { id } = useParams();
-  const [active, setActive] = useState(id ? +id : -1);
+
   const navigate = useNavigate();
 
   const handleCreateProject = async () => {
     const { value: name } = await Swal.fire({
-      title: 'Project Name',
-      input: 'text',
+      title: "Project Name",
+      input: "text",
       showCancelButton: true,
       inputValidator: (value) => {
         if (!value) {
-          return 'Please Enter the Project Name';
+          return "Please Enter the Project Name";
         }
         if (value.match(/^\d/)) {
-          return 'Project Name should not start with a number';
+          return "Project Name should not start with a number";
         }
       },
     });
@@ -37,63 +35,38 @@ const ProjectSideBar = () => {
   };
 
   const queryClient = useQueryClient();
-  const query = useQuery(['projects'], getProjects);
+  const query = useQuery(["projects"], getProjects);
 
   const createProjectMutation = useMutation({
     mutationFn: createProject,
     onSuccess: (data) => {
       queryClient.invalidateQueries(['projects']);
       navigate(`/project/${data.createProject.id}`);
-      setActive(data.createProject.id);
     },
   });
 
   const deleteProjectMutation = useMutation({
     mutationFn: deleteProject,
     onSuccess: (_, variables: number) => {
-      queryClient.invalidateQueries(['projects']);
-      queryClient.removeQueries({ queryKey: ['project', variables] });
-      navigate('/project');
+      queryClient.invalidateQueries(["projects"]);
+      queryClient.removeQueries({ queryKey: ["project", variables] });
+      navigate("/project");
     },
   });
 
   return (
     <>
-      <div className='sidebar'>
-        <div className='header'>
-          <Button
-            className='rounded-pill w-80'
-            variant='primary'
-            onClick={handleCreateProject}
-            disabled={createProjectMutation.isLoading}
-          >
-            {createProjectMutation.isLoading ? 'Creating...' : 'Create Project'}
-          </Button>
-        </div>
-        <div className='content'>
-          {query.isLoading && <div>Loading...</div>}
-          {query.data && (
-            <ul>
-              {query.data.getProjects.map((e) => (
-                <li
-                  key={e.project.id}
-                  onClick={() => setActive(e.project.id)}
-                  className={`${active == e.project.id ? 'active' : ''}`}
-                >
-                  <Link to={'/project/' + e.project.id}>{e.project.name}</Link>
-                  <div className='icon'>
-                    <FontAwesomeIcon
-                      icon={faTrash}
-                      className='font-icon'
-                      onClick={() => handleDeleteProject(e.project.id)}
-                    />
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+      <div className="w-60 absolute left-0 border-r h-[calc(100%-4rem)]">
+        <Sidebar
+          projects={query.data?.getProjects || []}
+          isLoading={query.isLoading}
+          selectedProjectId={id || "-1"}
+          handleCreateProject={handleCreateProject}
+          handleDeleteProject={handleDeleteProject}
+          className="hidden lg:block"
+        />
       </div>
+
       <Outlet />
     </>
   );

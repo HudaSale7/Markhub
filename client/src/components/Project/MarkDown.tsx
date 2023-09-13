@@ -1,16 +1,13 @@
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopy } from '@fortawesome/free-solid-svg-icons';
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import "./Project.css";
 
-const MarkDown = (props: { value: string, loading: boolean }) => {
+const MarkDown = (props: { value: string; loading: boolean }) => {
   if (props.loading) {
-    return (
-      <div className='loading'>
-        Loading...
-      </div>
-    );
+    return <div className="loading">Loading...</div>;
   }
   return (
     <ReactMarkdown
@@ -19,27 +16,27 @@ const MarkDown = (props: { value: string, loading: boolean }) => {
       components={{
         h1: ({ ...props }) => (
           <>
-            <h2 {...props} />
+            <h2 {...props} className=" text-3xl" />
             <hr />
           </>
         ),
         h2: ({ ...props }) => (
           <>
-            <h3 {...props} />
+            <h3 {...props} className=" text-2xl" />
             <hr />
           </>
         ),
-        h3: 'h4',
-        h4: 'h5',
-        h5: 'h6',
+        h3: ({ ...props }) => <h4 {...props} className=" text-xl" />,
+        h4: ({ ...props }) => <h5 {...props} className="  text-base" />,
+        h5: "h6",
         pre: ({ ...props }) => (
           <>
             <pre
               {...props}
               style={{
-                backgroundColor: '#61616129',
-                padding: '15px',
-                borderRadius: '10px',
+                backgroundColor: "#61616129",
+                padding: "15px",
+                borderRadius: "10px",
               }}
             />
           </>
@@ -48,7 +45,7 @@ const MarkDown = (props: { value: string, loading: boolean }) => {
           <>
             <code children={children} {...props} />
             <CopyToClipboard text={children.toString()}>
-              <div className='copy'>
+              <div className="copy">
                 <FontAwesomeIcon icon={faCopy} />
               </div>
             </CopyToClipboard>
