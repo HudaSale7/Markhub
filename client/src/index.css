@@ -56,3 +56,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer base {
+  ul,
+  ol {
+    list-style: revert;
+    margin: revert;
+    padding: revert;
+  }
+}

@@ -10,49 +10,51 @@ const MarkDown = (props: { value: string; loading: boolean }) => {
     return <div className="loading">Loading...</div>;
   }
   return (
-    <ReactMarkdown
-      children={props.value}
-      remarkPlugins={[remarkGfm]}
-      components={{
-        h1: ({ ...props }) => (
-          <>
-            <h2 {...props} className=" text-3xl" />
-            <hr />
-          </>
-        ),
-        h2: ({ ...props }) => (
-          <>
-            <h3 {...props} className=" text-2xl" />
-            <hr />
-          </>
-        ),
-        h3: ({ ...props }) => <h4 {...props} className=" text-xl" />,
-        h4: ({ ...props }) => <h5 {...props} className="  text-base" />,
-        h5: "h6",
-        pre: ({ ...props }) => (
-          <>
-            <pre
-              {...props}
-              style={{
-                backgroundColor: "#61616129",
-                padding: "15px",
-                borderRadius: "10px",
-              }}
-            />
-          </>
-        ),
-        code: ({ children, ...props }) => (
-          <>
-            <code children={children} {...props} />
-            <CopyToClipboard text={children.toString()}>
-              <div className="copy">
-                <FontAwesomeIcon icon={faCopy} />
-              </div>
-            </CopyToClipboard>
-          </>
-        ),
-      }}
-    />
+    <div>
+      <ReactMarkdown
+        children={props.value}
+        remarkPlugins={[remarkGfm]}
+        components={{
+          h1: ({ ...props }) => (
+            <>
+              <h2 {...props} className=" text-3xl" />
+              <hr />
+            </>
+          ),
+          h2: ({ ...props }) => (
+            <>
+              <h3 {...props} className=" text-2xl" />
+              <hr />
+            </>
+          ),
+          h3: ({ ...props }) => <h4 {...props} className=" text-xl" />,
+          h4: ({ ...props }) => <h5 {...props} className="  text-base" />,
+          h5: "h6",
+          pre: ({ ...props }) => (
+            <>
+              <pre
+                {...props}
+                style={{
+                  backgroundColor: "#61616129",
+                  padding: "15px",
+                  borderRadius: "10px",
+                }}
+              />
+            </>
+          ),
+          code: ({ children, ...props }) => (
+            <>
+              <code children={children} {...props} />
+              <CopyToClipboard text={children.toString()}>
+                <div className="copy">
+                  <FontAwesomeIcon icon={faCopy} />
+                </div>
+              </CopyToClipboard>
+            </>
+          ),
+        }}
+      />
+    </div>
   );
 };
 
