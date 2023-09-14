@@ -90,7 +90,7 @@ const Intro = () => {
           </Button>
         </div>
         <div
-          className={` mt-12 hidden rounded-lg border-[20px]   ${
+          className={`  w-11/12 mt-12 hidden rounded-lg border-[20px]   ${
             theme.theme === "dark"
               ? "bg-neutral-900 border-neutral-900"
               : "  border-neutral-50"
@@ -103,9 +103,7 @@ const Intro = () => {
             <Editor
               value={value}
               onMount={() => setLoading(false)}
-              onChange={(changedValue) =>
-                setValue(changedValue ? changedValue : value)
-              }
+              onChange={(changedValue) => setValue(changedValue || "")}
               height="100% !important"
               width="50%"
               defaultLanguage="markdown"
