@@ -14,9 +14,10 @@ const Project = () => {
   const theme = useTheme();
   const { id } = useParams();
   const projectId = id ? +id : -1;
+  const [loading, setLoading] = useState(true);
+
   const query = useQuery(["project", id], () => getProject(projectId));
   const queryClient = useQueryClient();
-  const [loading, setLoading] = useState(true);
   const debouncedValue = useDebounce(
     query.data?.getProject.project.content,
     1000
@@ -47,25 +48,21 @@ const Project = () => {
 
   const mutation = useMutation({
     mutationFn: updateProjectContent,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["project", id]);
-    },
   });
 
   useEffect(() => {
-    console.log("debouncedValue", debouncedValue);
     mutation.mutate({ id: projectId, content: debouncedValue });
   }, [debouncedValue]);
 
   let editorTheme = "";
 
   if (theme.theme === "dark") {
-    editorTheme = "myTheme";
+    editorTheme = "vs-dark";
   } else if (theme.theme === "light") {
     editorTheme = "vs-light";
   } else if (theme.theme === "system") {
     editorTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "myTheme"
+      ? "vs-dark"
       : "vs-light";
   }
 

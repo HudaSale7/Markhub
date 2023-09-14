@@ -1,8 +1,8 @@
-import { cn } from "@/lib/utils";
-import { Project } from "../ProjectsSideBar/types";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { Trash } from "lucide-react";
+import { cn } from '@/lib/utils';
+import { Project } from '../ProjectsSideBar/types';
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
+import { Pencil, Trash } from 'lucide-react';
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   projects: Project[];
@@ -10,6 +10,7 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   selectedProjectId: string;
   handleCreateProject: () => void;
   handleDeleteProject: (id: number) => void;
+  handleRenameProject: (id: number) => void;
 }
 
 export function Sidebar({
@@ -18,50 +19,58 @@ export function Sidebar({
   selectedProjectId,
   handleCreateProject,
   handleDeleteProject,
+  handleRenameProject,
 }: SidebarProps) {
   const navigate = useNavigate();
 
-  console.log("selectedProjectId", selectedProjectId);
-
   return (
-    <div className={cn("pb-12", className)}>
-      <div className="space-y-4 py-4">
-        <div className="px-3 py-2">
+    <div className={cn('pb-12', className)}>
+      <div className='space-y-4 py-4'>
+        <div className='px-3 py-2'>
           <Button
-            className="w-full  text-center justify-center mb-5"
+            className='w-full  text-center justify-center mb-5'
             onClick={() => {
               handleCreateProject();
             }}
           >
             Create Project
           </Button>
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-            Projects
-          </h2>
-          <div className="space-y-1">
+          <div className='space-y-1'>
             {projects.map((project) => (
               <Button
+                key={project.project.id}
                 variant={`${
                   project.project.id.toString() === selectedProjectId
-                    ? "secondary"
-                    : "ghost"
+                    ? 'secondary'
+                    : 'ghost'
                 }`}
-                className="w-full justify-start"
+                className='w-full justify-between px-2'
                 onClick={() => {
-                  navigate("/project/" + project.project.id);
+                  navigate('/project/' + project.project.id);
                 }}
               >
                 {project.project.name}
                 {project.project.id.toString() === selectedProjectId && (
-                  <Button
-                    className=" ml-auto"
-                    variant="ghost"
-                    onClick={() => {
-                      handleDeleteProject(project.project.id);
-                    }}
-                  >
-                    <Trash className="h-4 w-4" />
-                  </Button>
+                  <div>
+                    <Button
+                      className=' ml-auto px-2 py-1'
+                      variant='ghost'
+                      onClick={() => {
+                        handleRenameProject(project.project.id);
+                      }}
+                    >
+                      <Pencil className='h-4 w-4'/>
+                    </Button>
+                    <Button
+                      className=' ml-auto px-2 py-1'
+                      variant='ghost'
+                      onClick={() => {
+                        handleDeleteProject(project.project.id);
+                      }}
+                    >
+                      <Trash className='h-4 w-4' />
+                    </Button>
+                  </div>
                 )}
               </Button>
             ))}

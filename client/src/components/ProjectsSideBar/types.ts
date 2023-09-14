@@ -8,7 +8,7 @@ export interface ProjectCreateOutput {
     id: number;
     name: string;
     content: string;
-  }
+  };
 }
 
 export interface Projects {
@@ -21,4 +21,14 @@ export interface Project {
     name: string;
   };
   accessType: string;
+}
+
+export interface ProjectUpdateName {
+  id: number;
+  name: number;
+}
+
+export interface ProjectUpdateOutput {
+  id: number;
+  name: string;
 }

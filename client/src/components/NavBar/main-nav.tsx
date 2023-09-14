@@ -15,25 +15,25 @@ export function MainNav({
       className={cn("flex items-center space-x-4 lg:space-x-6", className)}
       {...props}
     >
-      <Link
-        to="/"
-        className="text-sm font-medium transition-colors hover:text-primary"
-      >
-        Home
-      </Link>
+    {!token && (<Link
+      to="/"
+      className="text-sm font-medium transition-colors hover:text-primary"
+    >
+      Home
+    </Link>)}
 
-      <Link
-        to="/signUp"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-      >
-        SignUp
-      </Link>
-      <Link
-        to="/login"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-      >
-        Login
-      </Link>
+    {!token && (<Link
+      to="/signUp"
+      className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+    >
+      SignUp
+    </Link>)}
+    { !token && (<Link
+      to="/login"
+      className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+    >
+      Login
+    </Link>)}
       {token && (
         <Link
           to="/project"
