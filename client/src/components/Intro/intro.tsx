@@ -2,7 +2,16 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useTheme } from "../theme/theme-provider.js";
 import "../Project/Project.css";
-import Editor, { loader } from "@monaco-editor/react";
+
+import Editor from "@monaco-editor/react";
+import * as monaco from "monaco-editor";
+import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
+import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker";
+import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
+import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
+import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
+import { loader } from "@monaco-editor/react";
+
 import Markdown from "../Project/MarkDown.jsx";
 import { useEffect, useState } from "react";
 
@@ -18,18 +27,29 @@ const Intro = () => {
   const theme = useTheme();
   const [loading, setLoading] = useState(true);
   const [value, setValue] = useState("# Welcome to Markdown Playground!");
-  loader.init().then((monaco) => {
-    monaco.editor.defineTheme("myTheme", {
-      base: "vs-dark",
-      inherit: true,
-      rules: [],
-      colors: {
-        "editor.background": "#030712",
-        "editor.lineHighlightBackground": "#00000000",
-        "editor.lineHighlightBorder": "#00000000",
-      },
-    });
-  });
+
+  self.MonacoEnvironment = {
+    getWorker(_, label) {
+      if (label === "json") {
+        return new jsonWorker();
+      }
+      if (label === "css" || label === "scss" || label === "less") {
+        return new cssWorker();
+      }
+      if (label === "html" || label === "handlebars" || label === "razor") {
+        return new htmlWorker();
+      }
+      if (label === "typescript" || label === "javascript") {
+        return new tsWorker();
+      }
+      return new editorWorker();
+    },
+  };
+
+  loader.config({ monaco });
+
+  loader.init();
+
   let editorTheme = "";
   if (theme.theme === "dark") {
     editorTheme = "vs-dark";
