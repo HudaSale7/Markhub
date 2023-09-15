@@ -2,7 +2,7 @@
 
 Easy to use, online Markdown editor with live preview.
 
-we solve the problem of writing markdown in a text editor and previewing it in a browser. Markhub is a web app that allows you to write markdown and preview it in real time.
+We solve the problem of writing markdown in a text editor and previewing it in a browser. Markhub is a web app that allows you to write markdown and preview it in real time.
 
 ![image](https://github.com/alimorgaan/Markhub/assets/32411364/2cb78369-b39c-4f20-ba0f-9df0f02f1887)
 
