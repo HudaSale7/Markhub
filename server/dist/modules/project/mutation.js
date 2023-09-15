@@ -1,10 +1,10 @@
-import { GraphQLError } from "graphql";
-import service from "./service.js";
+import { GraphQLError } from 'graphql';
+import service from './service.js';
 export const projectMutation = {
     createProject: async (_, args, contextValue) => {
         const user = contextValue.user;
         if (!user) {
-            throw new GraphQLError("Not Authenticated.", {
+            throw new GraphQLError('Not Authenticated.', {
                 extensions: {
                     code: 422,
                 },
@@ -13,7 +13,7 @@ export const projectMutation = {
         const project = args.project;
         const userProject = await service.createProject(project, user.id);
         if (!userProject) {
-            throw new GraphQLError("Server Error.", {
+            throw new GraphQLError('Server Error.', {
                 extensions: {
                     code: 500,
                 },
@@ -24,7 +24,7 @@ export const projectMutation = {
     updateProject: async (_, args, contextValue) => {
         const user = contextValue.user;
         if (!user) {
-            throw new GraphQLError("Not Authenticated.", {
+            throw new GraphQLError('Not Authenticated.', {
                 extensions: {
                     code: 422,
                 },
@@ -33,7 +33,7 @@ export const projectMutation = {
         const updatedProject = args.updatedProject;
         const previous = await service.findUserProject(user.id, +updatedProject.id);
         if (!previous || previous.accessType === `VIEW`) {
-            throw new GraphQLError("Not Allowed.", {
+            throw new GraphQLError('Not Allowed to Edit.', {
                 extensions: {
                     code: 420,
                 },
@@ -47,7 +47,7 @@ export const projectMutation = {
         }
         const project = await service.updateProject(previous.project);
         if (!project) {
-            throw new GraphQLError("Server Error.", {
+            throw new GraphQLError('Server Error.', {
                 extensions: {
                     code: 500,
                 },
@@ -58,7 +58,7 @@ export const projectMutation = {
     deleteProject: async (_, args, contextValue) => {
         const user = contextValue.user;
         if (!user) {
-            throw new GraphQLError("Not Authenticated.", {
+            throw new GraphQLError('Not Authenticated.', {
                 extensions: {
                     code: 422,
                 },
@@ -67,7 +67,7 @@ export const projectMutation = {
         const projectId = +args.id;
         const checkAccessType = await service.findUserProject(user.id, projectId);
         if (!checkAccessType || checkAccessType.accessType === `VIEW`) {
-            throw new GraphQLError("Not Allowed.", {
+            throw new GraphQLError('Not Allowed.', {
                 extensions: {
                     code: 420,
                 },
@@ -75,7 +75,7 @@ export const projectMutation = {
         }
         const project = await service.deleteProject(projectId);
         if (!project) {
-            throw new GraphQLError("Server Error.", {
+            throw new GraphQLError('Server Error.', {
                 extensions: {
                     code: 500,
                 },
