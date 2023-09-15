@@ -59,9 +59,15 @@
 
 @layer base {
   ul,
-  ol {
+  ol,
+  a,
+  li,
+  p {
     list-style: revert;
     margin: revert;
     padding: revert;
+  }
+  a {
+    color: royalblue;
   }
 }

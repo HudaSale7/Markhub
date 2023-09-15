@@ -68,7 +68,7 @@ const Intro = () => {
           Your Friendly Markdown Playground for Effortless Creativity!
         </h1>
         <p className="mt-6 text-center   text-gray-400"></p>
-        <div className="flex">
+        <div className="flex mb-10">
           <Button
             variant="secondary"
             className=" text-xl  mr-4"
@@ -126,7 +126,7 @@ const Intro = () => {
               }}
             />
 
-            <div className="markdown border-solid border-y border-r">
+            <div className="markdown border-solid border-y border-r ">
               <Markdown value={value} loading={loading} />
             </div>
           </div>
