@@ -71,3 +71,22 @@
     color: royalblue;
   }
 }
+
+@layer base {
+  th {
+    border-right: 1px solid #dcdcdc;
+    padding: 8px 12px;
+  }
+  td {
+    border-right: 1px solid #dcdcdc;
+    border-top: 1px solid #dcdcdc;
+    padding: 8px 12px;
+  }
+  td:last-child,
+  th:last-child {
+    border-right: none;
+  }
+  table {
+    margin-top: 15px;
+  }
+}
