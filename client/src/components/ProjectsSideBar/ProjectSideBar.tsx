@@ -99,6 +99,7 @@ const ProjectSideBar = () => {
           handleDeleteProject={handleDeleteProject}
           handleRenameProject={handleRenameProject}
           className="hidden lg:block"
+          createLoading={createProjectMutation.isLoading}
         />
       </div>
 

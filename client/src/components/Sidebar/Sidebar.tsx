@@ -10,6 +10,7 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   handleCreateProject: () => void;
   handleDeleteProject: (id: number) => void;
   handleRenameProject: (id: number) => void;
+  createLoading: boolean;
 }
 
 export function Sidebar({
@@ -18,6 +19,7 @@ export function Sidebar({
   handleCreateProject,
   handleDeleteProject,
   handleRenameProject,
+  createLoading,
 }: SidebarProps) {
   const navigate = useNavigate();
 
@@ -26,12 +28,14 @@ export function Sidebar({
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
           <Button
+            
             className="w-full  text-center justify-center mb-5"
             onClick={() => {
               handleCreateProject();
             }}
+            disabled={createLoading}
           >
-            Create Project
+            {createLoading ? "Creating..." : "Create Project"}
           </Button>
           <div className="space-y-1">
             {projects.map((project) => (
