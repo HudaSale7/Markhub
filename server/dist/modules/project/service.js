@@ -1,8 +1,8 @@
-import { prisma } from '../../util/db.js';
+import { prisma } from "../../util/db.js";
 const createProject = async (project, userId) => {
     const result = await prisma.userProject.create({
         data: {
-            accessType: 'EDIT',
+            accessType: "EDIT",
             user: {
                 connect: {
                     id: userId,
@@ -62,10 +62,41 @@ const findAllUserProject = async (userId) => {
     });
     return result;
 };
+const findUserByEmail = async (email) => {
+    const result = await prisma.user.findUnique({
+        where: {
+            email: email,
+        },
+    });
+    return result;
+};
+const addUserToProject = async (projectId, userId, accessType) => {
+    const result = await prisma.userProject.create({
+        data: {
+            accessType: accessType,
+            user: {
+                connect: {
+                    id: userId,
+                },
+            },
+            project: {
+                connect: {
+                    id: projectId,
+                },
+            },
+        },
+        select: {
+            project: true,
+        },
+    });
+    return result;
+};
 export default {
     createProject,
     updateProject,
     deleteProject,
     findAllUserProject,
     findUserProject,
+    findUserByEmail,
+    addUserToProject,
 };
