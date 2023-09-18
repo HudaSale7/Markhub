@@ -16,14 +16,27 @@ export const projectTypes = /* GraphQL */ `
     createProject(project: projectCreateInput!): Project
     updateProject(updatedProject: projectUpdateInput!): Project
     deleteProject(id: ID!): Project
+    addUserToProject(addUserToProjectInput: addUserToProjectInput): Project
   }
   input projectCreateInput {
     name: String!
     content: String!
   }
+
+  input addUserToProjectInput {
+    projectId: ID!
+    userEmail: String!
+    accessType: AccessType!
+  }
+
   input projectUpdateInput {
     id: ID!
     content: String
     name: String
+  }
+
+  enum AccessType {
+    EDIT
+    VIEW
   }
 `;
