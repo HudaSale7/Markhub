@@ -8,12 +8,12 @@ We solve the problem of writing markdown in a text editor and previewing it in a
 
 ### [Live Site](https://markhub.vercel.app)
 
-
 ## Features
 
 - Real time preview
 - Save files in the cloud
 - Share files with others
+- real time collaboration
 
 ## Stack
 
@@ -25,6 +25,8 @@ We solve the problem of writing markdown in a text editor and previewing it in a
 
 - ![GraphQL](https://img.shields.io/badge/-GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
 
+- ![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101)
+
 - ![Apollo-GraphQL](https://img.shields.io/badge/-ApolloGraphQL-311C87?style=for-the-badge&logo=apollo-graphql)
 
 - ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
@@ -35,5 +37,5 @@ We solve the problem of writing markdown in a text editor and previewing it in a
 
 ## Todo
 
-- [ ] Collaborative editing
-- [ ] Sharing projects
+- [x] Collaborative editing
+- [x] Sharing projects

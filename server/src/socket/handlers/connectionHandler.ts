@@ -7,7 +7,6 @@ export const connectionHandler = async (socket: Socket) => {
   const token = socket.handshake.headers.token as string;
   const projectId = socket.handshake.query.projectId as string;
 
-  console.log("hello");
   const { user } = getUserFromToken(token);
   if (!user) {
     socket.disconnect();

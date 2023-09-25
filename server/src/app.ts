@@ -16,6 +16,7 @@ await graphQlServer.start();
 
 app.use(cors());
 app.use(express.json());
+
 app.use(
   "/graphql",
   expressMiddleware(graphQlServer, {
