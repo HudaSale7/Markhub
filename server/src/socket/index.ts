@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { Server } from "socket.io";
 import http from "http";
-import { connectionHandler } from "./handlers/connectionHandler";
+import { connectionHandler } from "./handlers/connectionHandler.js";
 
 export const configSocketServer = (httpServer: http.Server): void => {
   const ioServer = new Server(httpServer, {
