@@ -3,46 +3,48 @@ generator client {
 }
 
 datasource db {
-  provider = "postgres"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  email String @unique
-  name String
-  password String
-  projects UserProject[]
+  id          Int              @id @default(autoincrement())
+  email       String           @unique
+  name        String
+  password    String
+  projects    UserProject[]
   permissions UserPermission[]
 }
 
 model Project {
-  id Int @id @default(autoincrement()) 
-  name String
-  content String @db.VarChar(5000)
-  users UserProject[]
+  id      Int           @id @default(autoincrement())
+  name    String
+  content String        @db.VarChar(5000)
+  users   UserProject[]
 }
 
 model Permission {
-  id Int @id @default(autoincrement()) 
-  type String
+  id    Int              @id @default(autoincrement())
+  type  String
   users UserPermission[]
 }
 
 model UserPermission {
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
-  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       Int
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
   permissionId Int
+
   @@id([userId, permissionId])
 }
 
 model UserProject {
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int 
-  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId Int 
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  project    Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId  Int
   accessType AccessType
+
   @@id([userId, projectId])
 }
 

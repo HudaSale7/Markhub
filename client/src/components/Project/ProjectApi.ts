@@ -1,5 +1,5 @@
-import { request, gql } from 'graphql-request';
-import { Project, ProjectUpdateOutput, ProjectUpdateContent } from './types';
+import { request, gql } from "graphql-request";
+import { Project, ProjectUpdateOutput, ProjectUpdateContent } from "./types";
 
 export const getProject = async (id: number) => {
   const query = gql`
@@ -16,7 +16,7 @@ export const getProject = async (id: number) => {
   `;
 
   const headers = {
-    Authorization: localStorage.getItem('token') || '',
+    Authorization: localStorage.getItem("token") || "",
   };
   const variables = {
     id: id,
@@ -39,14 +39,36 @@ export const updateProjectContent = async (project: ProjectUpdateContent) => {
     }
   `;
   const headers = {
-    Authorization: localStorage.getItem('token') || '',
+    Authorization: localStorage.getItem("token") || "",
   };
   const variables = {
-    project: project
-  }
+    project: project,
+  };
   const data: ProjectUpdateOutput = await request(
     `${import.meta.env.VITE_API}/graphql`,
     mutation,
+    variables,
+    headers
+  );
+  return data;
+};
+
+export const getProjectUsersCount = async (id: number) => {
+  const query = gql`
+    query projectsQuery($id: ID!) {
+      getProjectUsersCount(id: $id)
+    }
+  `;
+
+  const headers = {
+    Authorization: localStorage.getItem("token") || "",
+  };
+  const variables = {
+    id: id,
+  };
+  const data: { getProjectUsersCount: number } = await request(
+    `${import.meta.env.VITE_API}/graphql`,
+    query,
     variables,
     headers
   );
