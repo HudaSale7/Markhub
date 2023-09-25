@@ -11,6 +11,7 @@ export const projectTypes = /* GraphQL */ `
   extend type Query {
     getProjects: [ProjectAccessType!]
     getProject(id: ID!): ProjectAccessType!
+    getProjectUsersCount(id: ID!): Int!
   }
   extend type Mutation {
     createProject(project: projectCreateInput!): Project

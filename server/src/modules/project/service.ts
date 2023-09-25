@@ -105,6 +105,15 @@ const addUserToProject = async (
   return result;
 };
 
+const getProjectUsersCount = async (projectId: number) => {
+  const result = await prisma.userProject.count({
+    where: {
+      projectId: projectId,
+    },
+  });
+  return result;
+};
+
 export default {
   createProject,
   updateProject,
@@ -113,4 +122,5 @@ export default {
   findUserProject,
   findUserByEmail,
   addUserToProject,
+  getProjectUsersCount,
 };
