@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
-import { getUserFromToken } from "../../middleware/getUser";
-import projectService from "../../modules/project/service";
+import { getUserFromToken } from "../../middleware/getUser.js";
+import projectService from "../../modules/project/service.js";
 import { Project } from "@prisma/client";
 
 export const connectionHandler = async (socket: Socket) => {
